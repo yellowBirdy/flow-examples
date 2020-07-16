@@ -1,0 +1,11 @@
+import HelloWorld from 0x179b6b1cb6755e31
+
+pub fun main() {
+
+    let acct = getAccount(0x179b6b1cb6755e31)
+
+    let cap = acct.getCapability(/public/Hello)
+    let ref = cap!.borrow<&HelloWorld.HelloAsset>()
+
+    log(ref?.hello())
+}   
