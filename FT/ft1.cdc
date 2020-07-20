@@ -56,11 +56,11 @@ access(all) contract FungibleToken1 {
         self.totalSupply = UFix64(500)
 
         //create and save Vault
-        self.account.save(<-create Vault(balance: self.totalSupply), to:/storage/mainVault)
+        self.account.save(<-create Vault(balance: self.totalSupply), to:/storage/FTVault)
         //create and save Minter
-        self.account.save(<-create Minter(), to: /storage/mainMinter)
+        self.account.save(<-create Minter(), to: /storage/FTMinter)
         //opt: expose Receiver of Vault 
-        self.account.link<&FungibleToken1.Vault{Receiver,Balance}>(/public/mainReceiver, target: /storage/mainVault)
+        self.account.link<&FungibleToken1.Vault{Receiver,Balance}>(/public/FTReceiver, target: /storage/FTVault)
 
     }
     
