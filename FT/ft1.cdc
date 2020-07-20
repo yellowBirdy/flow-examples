@@ -63,5 +63,6 @@ access(all) contract FungibleToken1 {
         self.account.link<&FungibleToken1.Vault{Receiver,Balance}>(/public/mainReceiver, target: /storage/mainVault)
 
     }
+    
 }
  
