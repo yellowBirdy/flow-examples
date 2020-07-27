@@ -93,6 +93,26 @@ pub contract ExampleNFT: NonFungibleToken {
 			recipient.deposit(token: <-newNFT)
 
             ExampleNFT.totalSupply = ExampleNFT.totalSupply + UInt64(1)
+            //double generate every 5th token
+            /*if ExampleNFT.totalSupply % UInt64(5) == UInt64(0)   {
+                var newerNFT <- create NFT(initID: ExampleNFT.totalSupply)
+
+			// deposit it in the recipient's account using their reference
+			    recipient.deposit(token: <-newerNFT)
+
+                ExampleNFT.totalSupply = ExampleNFT.totalSupply + UInt64(1)
+            }
+            */
+            //double generate every 5th token on average
+            if unsafeRandom() % UInt64(5) == UInt64(0)   {
+                var newerNFT <- create NFT(initID: ExampleNFT.totalSupply)
+
+			// deposit it in the recipient's account using their reference
+			    recipient.deposit(token: <-newerNFT)
+
+                ExampleNFT.totalSupply = ExampleNFT.totalSupply + UInt64(1)
+            }
+
 		}
 	}
 
@@ -101,16 +121,24 @@ pub contract ExampleNFT: NonFungibleToken {
         self.totalSupply = 0
 
         // Create a Collection resource and save it to storage
-        let collection <- create Collection()
-        self.account.save(<-collection, to: /storage/NFTCollection)
+        if self.account.load<&Collection>(from: /storage/NFTCollection) != nil  {
+            let collection <- create Collection()
+            self.account.save(<-collection, to: /storage/NFTCollection)
+                    // create a public capability for the collection
 
-        // create a public capability for the collection
-        self.account.link<&{NonFungibleToken.CollectionPublic}>(
+            self.account.link<&{NonFungibleToken.CollectionPublic}>(
             /public/NFTCollection,
             target: /storage/NFTCollection
-        )
+)
+        
+        }
+
 
         // Create a Minter resource and save it to storage
+        let oldMinter <- self.account.load<@NFTMinter>(from:/storage/NFTMinter)
+        destroy oldMinter
+
+
         let minter <- create NFTMinter()
         self.account.save(<-minter, to: /storage/NFTMinter)
 
