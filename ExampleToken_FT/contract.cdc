@@ -196,3 +196,4 @@ pub contract ExampleToken: FungibleToken {
         emit TokensInitialized(initialSupply: self.totalSupply)
     }
 }
+ 

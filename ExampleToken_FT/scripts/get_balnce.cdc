@@ -23,3 +23,4 @@ pub fun main() {
 
     log(vaultRef3.balance)
 }
+ 

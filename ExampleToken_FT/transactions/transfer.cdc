@@ -16,11 +16,11 @@ transaction() {
     prepare(signer: AuthAccount) {
 
         // Get a reference to the signer's stored vault
-        let vaultRef = signer.borrow<&ExampleToken.Vault>(from: /storage/exampleTokenVault)
+        let vaultRef = signer.borrow<&{FungibleToken.Provider}>(from: /storage/exampleTokenVault)
 			?? panic("Could not borrow reference to the owner's Vault!")
 
         // Withdraw tokens from the signer's stored vault
-        self.sentVault <- vaultRef.withdraw(amount: 182.0)
+        self.sentVault <- vaultRef.withdraw(amount: 1.0)
     }
 
     execute {
